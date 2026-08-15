@@ -1,0 +1,21 @@
+[package]
+name = "universal-local-toolbox"
+version = "0.1.0"
+description = "Universal Local Toolbox — offline, cross-platform utility toolbox"
+edition = "2021"
+
+[lib]
+# app_lib pattern: main.rs (desktop) and the mobile entry point in lib.rs
+# both call into this library. See src/lib.rs for why.
+name = "universal_local_toolbox_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+# NOTE: no other dependencies yet. Processing crates (image, pdf, hashing,
+# etc.) are added one at a time, alongside the tool that needs them, per
+# the approved Project Plan's "no unnecessary dependency" rule.

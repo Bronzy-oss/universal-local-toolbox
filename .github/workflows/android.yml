@@ -1,0 +1,68 @@
+# Phase 1 CI check — Android (debug build), matching the project's
+# stated platform priority: Android first, desktop later (Phase 7).
+#
+# Scope on purpose: this only proves `tauri android build --debug`
+# succeeds and produces an unsigned debug APK for one architecture
+# (aarch64 — what almost every real phone, including the dev's own
+# Oppo A5x, actually uses). Release signing, multi-ABI builds, and
+# Play Store distribution are separate, later concerns.
+name: Android Build Check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build (Android, debug)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Android NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r27d
+          link-to-sdk: true
+
+      - name: Export NDK_HOME
+        run: echo "NDK_HOME=${{ steps.setup-ndk.outputs.ndk-path }}" >> "$GITHUB_ENV"
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+
+      - name: Initialize Android project
+        run: npx tauri android init
+
+      - name: Build Android (debug APK, aarch64 only)
+        run: npx tauri android build --debug --target aarch64

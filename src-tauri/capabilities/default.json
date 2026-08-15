@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window. Core-only for now — no filesystem, network, or shell access. Each tool's permissions are added one at a time, when that tool is implemented, per the Privacy/Security Strategy in the Project Plan.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
