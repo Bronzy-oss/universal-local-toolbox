@@ -27,7 +27,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: npm
+          # No `cache: npm` yet — that option requires a package-lock.json
+          # to key the cache on, and none exists yet (npm install has never
+          # run, since the dev sandbox has no network access). Once a
+          # package-lock.json is committed after the first successful
+          # `npm install`, add `cache: npm` back here to speed up future runs.
 
       - name: Install frontend dependencies
         run: npm install
