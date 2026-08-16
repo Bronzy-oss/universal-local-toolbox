@@ -1,7 +1,7 @@
 <script>
-  // Not functional yet — no registry/search-index to query against.
-  // Wired up in the Smart Detection + Universal Search step
-  // (Phase 4 of the roadmap).
+  // Controlled via bind:value from the parent (Home), which decides
+  // whether to show normal sections or search results based on it.
+  let { value = $bindable("") } = $props();
 </script>
 
 <div class="search-bar">
@@ -10,7 +10,7 @@
     <circle cx="11" cy="11" r="8" />
     <line x1="21" y1="21" x2="16.65" y2="16.65" />
   </svg>
-  <input type="text" placeholder="Search tools..." aria-label="Search tools" />
+  <input type="text" placeholder="Search tools..." aria-label="Search tools" bind:value />
 </div>
 
 <style>

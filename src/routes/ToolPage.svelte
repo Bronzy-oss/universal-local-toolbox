@@ -2,9 +2,14 @@
   import PageHeader from "../lib/components/PageHeader.svelte";
   import IconButton from "../lib/components/IconButton.svelte";
   import GuideModal from "../lib/components/GuideModal.svelte";
+  import { recordRecentTool } from "../lib/stores/recent.js";
 
   let { tool, onBack } = $props();
   let showGuide = $state(false);
+
+  $effect(() => {
+    recordRecentTool(tool.id);
+  });
 </script>
 
 <main>

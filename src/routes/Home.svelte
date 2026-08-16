@@ -1,11 +1,14 @@
 <script>
   import SearchBar from "../lib/components/SearchBar.svelte";
+  import SearchResults from "../lib/components/SearchResults.svelte";
   import QuickActions from "../lib/components/QuickActions.svelte";
   import RecentSection from "../lib/components/RecentSection.svelte";
   import CategoryGrid from "../lib/components/CategoryGrid.svelte";
   import IconButton from "../lib/components/IconButton.svelte";
 
   let { onOpenSettings, onOpenCategory, onOpenTool } = $props();
+
+  let searchQuery = $state("");
 </script>
 
 <main>
@@ -23,10 +26,15 @@
     </IconButton>
   </div>
 
-  <SearchBar />
-  <QuickActions onSelect={onOpenTool} />
-  <RecentSection />
-  <CategoryGrid onSelect={onOpenCategory} />
+  <SearchBar bind:value={searchQuery} />
+
+  {#if searchQuery.trim()}
+    <SearchResults query={searchQuery} onSelectTool={onOpenTool} onSelectCategory={onOpenCategory} />
+  {:else}
+    <QuickActions onSelect={onOpenTool} />
+    <RecentSection onSelect={onOpenTool} />
+    <CategoryGrid onSelect={onOpenCategory} />
+  {/if}
 </main>
 
 <style>
