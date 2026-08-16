@@ -1,6 +1,15 @@
 <script>
   import Home from "./routes/Home.svelte";
-  // No routing yet (Phase 2 next step) — Home is the only screen.
+  import Settings from "./routes/Settings.svelte";
+
+  // Simple local view-switch — no router needed yet for two screens.
+  // Revisit once Search / Category-detail / Guide screens need real
+  // navigation (Phase 3+).
+  let view = $state("home");
 </script>
 
-<Home />
+{#if view === "settings"}
+  <Settings onBack={() => (view = "home")} />
+{:else}
+  <Home onOpenSettings={() => (view = "settings")} />
+{/if}

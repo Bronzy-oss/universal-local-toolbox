@@ -26,16 +26,19 @@
     Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #121212;
-    --color-surface: #1e1e1e;
-    --color-border: #2d2d2d;
-    --color-text: #f5f5f5;
-    --color-text-muted: #9ca3af;
-    --color-accent: #6c8fff;
-    --color-accent-soft: #1e2a4a;
-  }
+/* Applied explicitly by src/lib/stores/theme.js (which resolves the
+   "system" preference itself via matchMedia), plus the inline
+   anti-flash script in index.html for first paint. Not a plain
+   `@media (prefers-color-scheme: dark)` block, because that alone
+   couldn't be overridden by an explicit Light/Dark choice in Settings. */
+:root[data-theme="dark"] {
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-border: #2d2d2d;
+  --color-text: #f5f5f5;
+  --color-text-muted: #9ca3af;
+  --color-accent: #6c8fff;
+  --color-accent-soft: #1e2a4a;
 }
 
 * {

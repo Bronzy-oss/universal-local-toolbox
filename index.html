@@ -7,6 +7,24 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>Universal Local Toolbox</title>
+    <script>
+      // Sets data-theme before Svelte mounts, so the correct theme
+      // applies on first paint instead of flashing light-then-dark.
+      // Key must match src/lib/stores/theme.js's STORAGE_KEY.
+      (function () {
+        try {
+          var pref = localStorage.getItem("ult:theme-preference") || "system";
+          var dark =
+            pref === "dark" ||
+            (pref === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.setAttribute(
+            "data-theme",
+            dark ? "dark" : "light",
+          );
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
