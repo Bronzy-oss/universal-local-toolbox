@@ -2,16 +2,14 @@
   import Section from "./Section.svelte";
   import ToolCard from "./ToolCard.svelte";
   import { recentToolIds } from "../stores/recent.js";
-  import { quickActions } from "../data/quickActions.js";
+  import { getToolById } from "../registry/tools.js";
 
   let { onSelect } = $props();
 
-  // Resolved against current quickActions data each time, by id —
-  // never stores stale copies of label/guide text.
+  // Resolved against the current registry each time, by id — never
+  // stores stale copies of label/guide text.
   let recentTools = $derived(
-    $recentToolIds
-      .map((id) => quickActions.find((t) => t.id === id))
-      .filter(Boolean),
+    $recentToolIds.map((id) => getToolById(id)).filter(Boolean),
   );
 </script>
 

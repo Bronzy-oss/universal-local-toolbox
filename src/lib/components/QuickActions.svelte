@@ -1,14 +1,15 @@
 <script>
   import Section from "./Section.svelte";
   import ToolCard from "./ToolCard.svelte";
-  import { quickActions } from "../data/quickActions.js";
+  import { getQuickActions } from "../registry/tools.js";
 
   let { onSelect } = $props();
+  const actions = getQuickActions();
 </script>
 
 <Section label="Quick Actions">
   <div class="grid-2">
-    {#each quickActions as action (action.id)}
+    {#each actions as action (action.id)}
       <ToolCard
         glyph={action.glyph}
         label={action.label}

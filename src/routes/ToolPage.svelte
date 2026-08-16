@@ -24,9 +24,22 @@
     </IconButton>
   </PageHeader>
 
-  <div class="empty-state">
-    <p>This tool is coming soon.</p>
-  </div>
+  {#if tool.load}
+    {#await tool.load()}
+      <p class="status-text">Loading…</p>
+    {:then module}
+      {@const ToolComponent = module.default}
+      <ToolComponent />
+    {:catch}
+      <div class="empty-state">
+        <p>This tool couldn't be loaded. Try going back and opening it again.</p>
+      </div>
+    {/await}
+  {:else}
+    <div class="empty-state">
+      <p>This tool is coming soon.</p>
+    </div>
+  {/if}
 </main>
 
 {#if showGuide}
@@ -61,5 +74,11 @@
     font-size: 0.875rem;
     color: var(--color-text-muted);
     line-height: 1.5;
+  }
+
+  .status-text {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
   }
 </style>

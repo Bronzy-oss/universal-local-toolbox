@@ -17,7 +17,7 @@
 {#if view.name === "settings"}
   <Settings onBack={goHome} />
 {:else if view.name === "category"}
-  <CategoryPage category={view.category} onBack={goHome} />
+  <CategoryPage category={view.category} onBack={goHome} onOpenTool={(tool) => (view = { name: "tool", tool })} />
 {:else if view.name === "tool"}
   <ToolPage tool={view.tool} onBack={goHome} />
 {:else}

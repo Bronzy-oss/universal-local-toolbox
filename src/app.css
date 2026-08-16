@@ -10,6 +10,8 @@
   --color-text-muted: #6b7280;
   --color-accent: #2563eb;
   --color-accent-soft: #eef2ff;
+  --color-error-bg: #fee2e2;
+  --color-error-text: #991b1b;
 
   --radius-lg: 18px;
   --radius-md: 14px;
@@ -39,6 +41,8 @@
   --color-text-muted: #9ca3af;
   --color-accent: #6c8fff;
   --color-accent-soft: #1e2a4a;
+  --color-error-bg: #4c1d1d;
+  --color-error-text: #fca5a5;
 }
 
 * {

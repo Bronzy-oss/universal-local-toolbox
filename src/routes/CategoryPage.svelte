@@ -1,17 +1,29 @@
 <script>
   import PageHeader from "../lib/components/PageHeader.svelte";
+  import ToolCard from "../lib/components/ToolCard.svelte";
+  import { getToolsByCategory } from "../lib/registry/tools.js";
 
   // No guide button here — guides are per-tool (Project Plan section
-  // 33), not per-category. Once Phase 3 tools exist, this list of
-  // tools-in-this-category replaces the empty state below.
-  let { category, onBack } = $props();
+  // 33), not per-category.
+  let { category, onBack, onOpenTool } = $props();
+
+  let categoryTools = $derived(getToolsByCategory(category.id));
 </script>
 
 <main>
   <PageHeader title={category.label} {onBack} />
-  <div class="empty-state">
-    <p>Tools for {category.label} are coming soon.</p>
-  </div>
+
+  {#if categoryTools.length === 0}
+    <div class="empty-state">
+      <p>Tools for {category.label} are coming soon.</p>
+    </div>
+  {:else}
+    <div class="grid-2">
+      {#each categoryTools as tool (tool.id)}
+        <ToolCard glyph={tool.glyph} label={tool.label} onclick={() => onOpenTool(tool)} />
+      {/each}
+    </div>
+  {/if}
 </main>
 
 <style>
