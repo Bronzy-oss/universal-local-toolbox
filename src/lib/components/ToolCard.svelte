@@ -3,10 +3,10 @@
   // `glyph` is a short placeholder monogram (e.g. "C", "PDF") standing
   // in for a real icon set, which is a later design pass — not part
   // of this structural step.
-  let { glyph, label, size = "md" } = $props();
+  let { glyph, label, size = "md", onclick } = $props();
 </script>
 
-<button type="button" class="card" class:lg={size === "lg"}>
+<button type="button" class="card" class:lg={size === "lg"} {onclick}>
   <span class="icon-slot">{glyph}</span>
   <span class="label">{label}</span>
 </button>

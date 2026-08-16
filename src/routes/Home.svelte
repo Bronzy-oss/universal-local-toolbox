@@ -5,7 +5,7 @@
   import CategoryGrid from "../lib/components/CategoryGrid.svelte";
   import IconButton from "../lib/components/IconButton.svelte";
 
-  let { onOpenSettings } = $props();
+  let { onOpenSettings, onOpenCategory, onOpenTool } = $props();
 </script>
 
 <main>
@@ -24,9 +24,9 @@
   </div>
 
   <SearchBar />
-  <QuickActions />
+  <QuickActions onSelect={onOpenTool} />
   <RecentSection />
-  <CategoryGrid />
+  <CategoryGrid onSelect={onOpenCategory} />
 </main>
 
 <style>
