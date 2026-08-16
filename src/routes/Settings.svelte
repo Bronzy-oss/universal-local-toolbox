@@ -1,6 +1,5 @@
 <script>
   import IconButton from "../lib/components/IconButton.svelte";
-  import Section from "../lib/components/Section.svelte";
   import ThemeToggle from "../lib/components/ThemeToggle.svelte";
 
   let { onBack } = $props();
@@ -18,9 +17,7 @@
     <h1>Settings</h1>
   </div>
 
-  <Section label="Appearance">
-    <ThemeToggle />
-  </Section>
+  <ThemeToggle />
 </main>
 
 <style>
