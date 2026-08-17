@@ -1,13 +1,19 @@
 <script>
-  // Shared card used for both Quick Actions and Category items.
-  // `glyph` is a short placeholder monogram (e.g. "C", "PDF") standing
-  // in for a real icon set, which is a later design pass — not part
-  // of this structural step.
-  let { glyph, label, size = "md", onclick } = $props();
+  // Shared card used for Quick Actions, Category items, and search
+  // results. `icon` (an imported image URL) is used when available;
+  // otherwise falls back to the `glyph` monogram placeholder — most
+  // tools still don't have a real icon yet.
+  let { glyph, icon, label, size = "md", onclick } = $props();
 </script>
 
 <button type="button" class="card" class:lg={size === "lg"} {onclick}>
-  <span class="icon-slot">{glyph}</span>
+  <span class="icon-slot" class:has-image={!!icon}>
+    {#if icon}
+      <img src={icon} alt="" />
+    {:else}
+      {glyph}
+    {/if}
+  </span>
   <span class="label">{label}</span>
 </button>
 
@@ -44,6 +50,20 @@
     width: 44px;
     height: 44px;
     font-size: 0.875rem;
+  }
+
+  .icon-slot.has-image {
+    background: transparent;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .icon-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
   }
 
   .label {

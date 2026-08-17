@@ -19,7 +19,13 @@
   <div class="results-list">
     {#each results as result (result.type + result.item.id)}
       <button type="button" class="result-row" onclick={() => handleSelect(result)}>
-        <span class="icon-slot">{result.item.glyph}</span>
+        <span class="icon-slot" class:has-image={!!result.item.icon}>
+          {#if result.item.icon}
+            <img src={result.item.icon} alt="" />
+          {:else}
+            {result.item.glyph}
+          {/if}
+        </span>
         <span class="label">{result.item.label}</span>
         <span class="type-tag">{result.type === "tool" ? "Quick Action" : "Category"}</span>
       </button>

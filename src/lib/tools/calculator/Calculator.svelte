@@ -3,35 +3,69 @@
 
   let state = $state(calc.createInitialState());
 
-  function digit(d) {
-    state = calc.inputDigit(state, d);
-  }
-  function decimal() {
-    state = calc.inputDecimal(state);
-  }
-  function clear() {
-    state = calc.clearAll();
-  }
-  function sign() {
-    state = calc.toggleSign(state);
-  }
-  function percent() {
-    state = calc.inputPercent(state);
-  }
-  function op(nextOp) {
-    state = calc.performOperation(state, nextOp);
-  }
-  function equals() {
-    state = calc.handleEquals(state);
-  }
+  const digit = (d) => (state = calc.inputDigit(state, d));
+  const decimal = () => (state = calc.inputDecimal(state));
+  const op = (o) => (state = calc.inputOperator(state, o));
+  const fn = (f) => (state = calc.inputFunction(state, f));
+  const paren = (p) => (state = calc.inputParen(state, p));
+  const constant = (c) => (state = calc.inputConstant(state, c));
+  const postfix = (p) => (state = calc.inputPostfix(state, p));
+  const back = () => (state = calc.backspace(state));
+  const clear = () => (state = calc.clearAll(state));
+  const equals = () => (state = calc.handleEquals(state));
+  const toggleAngle = () => (state = calc.toggleAngleMode(state));
+  const setMode = (m) => (state = calc.setMode(state, m));
+
+  const sciFunctions = [
+    { label: "sin", action: () => fn("sin") },
+    { label: "cos", action: () => fn("cos") },
+    { label: "tan", action: () => fn("tan") },
+    { label: "log", action: () => fn("log") },
+    { label: "ln", action: () => fn("ln") },
+    { label: "√", action: () => fn("sqrt") },
+    { label: "^", action: () => op("^") },
+    { label: "π", action: () => constant("π") },
+    { label: "e", action: () => constant("e") },
+    { label: "!", action: () => postfix("!") },
+    { label: "(", action: () => paren("(") },
+    { label: ")", action: () => paren(")") },
+  ];
 </script>
 
 <div class="calculator">
-  <div class="display">{state.display}</div>
+  <div class="display">
+    <div class="result-line">{state.resultLine}</div>
+    <div class="main-line">{calc.getDisplay(state)}</div>
+  </div>
+
+  <div class="mode-row">
+    <div class="mode-toggle">
+      <button type="button" class:active={state.mode === "basic"} onclick={() => setMode("basic")}>
+        Basic
+      </button>
+      <button type="button" class:active={state.mode === "scientific"} onclick={() => setMode("scientific")}>
+        Scientific
+      </button>
+    </div>
+    {#if state.mode === "scientific"}
+      <button type="button" class="angle-toggle" onclick={toggleAngle}>
+        {state.angleMode.toUpperCase()}
+      </button>
+    {/if}
+  </div>
+
+  {#if state.mode === "scientific"}
+    <div class="sci-strip">
+      {#each sciFunctions as f (f.label)}
+        <button type="button" class="chip" onclick={f.action}>{f.label}</button>
+      {/each}
+    </div>
+  {/if}
+
   <div class="pad">
-    <button class="key fn" onclick={clear}>C</button>
-    <button class="key fn" onclick={sign}>+/−</button>
-    <button class="key fn" onclick={percent}>%</button>
+    <button class="key fn" onclick={clear}>AC</button>
+    <button class="key fn" onclick={() => postfix("%")}>%</button>
+    <button class="key fn" onclick={back}>⌫</button>
     <button class="key op" onclick={() => op("÷")}>÷</button>
 
     <button class="key" onclick={() => digit("7")}>7</button>
@@ -49,7 +83,8 @@
     <button class="key" onclick={() => digit("3")}>3</button>
     <button class="key op" onclick={() => op("+")}>+</button>
 
-    <button class="key zero" onclick={() => digit("0")}>0</button>
+    <button class="key" onclick={() => { digit("0"); digit("0"); }}>00</button>
+    <button class="key" onclick={() => digit("0")}>0</button>
     <button class="key" onclick={decimal}>.</button>
     <button class="key equals" onclick={equals}>=</button>
   </div>
@@ -59,20 +94,96 @@
   .calculator {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
 
   .display {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-4);
+    padding: var(--space-4);
     text-align: right;
-    font-size: 2.25rem;
-    font-weight: 300;
+  }
+
+  .result-line {
+    min-height: 1.2em;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
     font-variant-numeric: tabular-nums;
     overflow-x: auto;
     white-space: nowrap;
+  }
+
+  .main-line {
+    font-size: 2rem;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .mode-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .mode-toggle {
+    display: flex;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .mode-toggle button {
+    border: none;
+    background: transparent;
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    color: var(--color-text-muted);
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .mode-toggle button.active {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+  }
+
+  .angle-toggle {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: 7px 12px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .sci-strip {
+    display: flex;
+    gap: var(--space-2);
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .chip {
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    cursor: pointer;
   }
 
   .pad {
@@ -82,11 +193,11 @@
   }
 
   .key {
-    height: 60px;
+    height: 58px;
     border: 1px solid var(--color-border);
     background: var(--color-surface);
     border-radius: var(--radius-md);
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 550;
     color: var(--color-text);
     cursor: pointer;
@@ -106,9 +217,5 @@
     background: var(--color-accent);
     color: white;
     border-color: var(--color-accent);
-  }
-
-  .key.zero {
-    grid-column: span 2;
   }
 </style>

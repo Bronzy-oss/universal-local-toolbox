@@ -7,22 +7,37 @@
 // it. A tool WITH `load` (a function returning a dynamic import) is
 // real — its component code is only fetched when opened, per the
 // Project Plan's lazy-loading strategy.
+//
+// `icon` (an imported image) is used when available; tools without
+// one fall back to the `glyph` monogram placeholder. Icons are added
+// as each tool is built/reaches this list — not a bulk asset dump.
+import iconCalculator from "../../assets/icons/calculator.png";
+import iconUnitConverter from "../../assets/icons/unit-converter.png";
+import iconJsonFormatter from "../../assets/icons/json-formatter.png";
+import iconCompress from "../../assets/icons/compress.png";
+import iconConvertImage from "../../assets/icons/convert-image.png";
+import iconImageToPdf from "../../assets/icons/image-to-pdf.png";
+import iconQrGenerator from "../../assets/icons/qr-generator.png";
+import iconFileManager from "../../assets/icons/file-manager.png";
+
 export const tools = [
   // --- Sprint 1 (built) ---
   {
     id: "calculator",
     label: "Calculator",
     glyph: "=",
+    icon: iconCalculator,
     category: "everyday",
     guide: {
-      whatItDoes: "A standard four-function calculator for quick everyday math.",
+      whatItDoes:
+        "A calculator with a Basic mode for everyday math and a Scientific mode for trig, logs, and more.",
       steps: [
-        "Tap numbers and an operator (+, −, ×, ÷).",
-        "Keep entering numbers and operators to chain calculations.",
-        "Tap = for the result.",
-        "Tap C to clear and start over.",
+        "Type a full expression, like a real calculator — e.g. 12×7 or sin(30).",
+        "Tap Scientific for trig/log/power functions; tap DEG/RAD to switch angle units.",
+        "Tap ⌫ to correct a mistake, or AC to start over.",
+        "Tap = to see the result; the expression you typed stays visible above it.",
       ],
-      example: "12 × 7 = 84",
+      example: "157,000 × 120 = 18,840,000",
     },
     load: () => import("../tools/calculator/Calculator.svelte"),
   },
@@ -30,6 +45,7 @@ export const tools = [
     id: "unit-converter",
     label: "Unit Converter",
     glyph: "U",
+    icon: iconUnitConverter,
     category: "everyday",
     guide: {
       whatItDoes: "Convert a value between units — length, weight, or temperature.",
@@ -47,6 +63,7 @@ export const tools = [
     id: "json-formatter",
     label: "JSON Formatter",
     glyph: "{}",
+    icon: iconJsonFormatter,
     category: "developer",
     guide: {
       whatItDoes: "Pretty-print or minify JSON, with a clear error if it's invalid.",
@@ -59,6 +76,23 @@ export const tools = [
     },
     load: () => import("../tools/json-formatter/JsonFormatter.svelte"),
   },
+  {
+    id: "file-manager",
+    label: "File Manager",
+    glyph: "F",
+    icon: iconFileManager,
+    category: "files",
+    guide: {
+      whatItDoes: "Browse the files and folders on your device, and open them.",
+      steps: [
+        "Tap a folder to open it.",
+        "Tap ← to go back up a level.",
+        "Tap a file to open it with your device's default app for that file type.",
+      ],
+      example: "Downloads → photo.jpg → opens in your gallery app",
+    },
+    load: () => import("../tools/file-manager/FileManager.svelte"),
+  },
 
   // --- Not built yet (Sprint 4) — kept as Quick Actions per the
   // Project Plan's Home mockup; ToolPage shows "coming soon" for
@@ -67,6 +101,7 @@ export const tools = [
     id: "compress",
     label: "Compress",
     glyph: "C",
+    icon: iconCompress,
     category: "images",
     isQuickAction: true,
     guide: {
@@ -79,6 +114,7 @@ export const tools = [
     id: "convert-image",
     label: "Convert",
     glyph: "⇄",
+    icon: iconConvertImage,
     category: "images",
     isQuickAction: true,
     guide: {
@@ -91,6 +127,7 @@ export const tools = [
     id: "image-to-pdf",
     label: "PDF",
     glyph: "PDF",
+    icon: iconImageToPdf,
     category: "documents",
     isQuickAction: true,
     guide: {
@@ -108,6 +145,7 @@ export const tools = [
     id: "qr-generator",
     label: "QR Code",
     glyph: "QR",
+    icon: iconQrGenerator,
     category: "everyday",
     isQuickAction: true,
     guide: {
