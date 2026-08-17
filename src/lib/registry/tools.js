@@ -82,6 +82,9 @@ export const tools = [
     glyph: "F",
     icon: iconFileManager,
     category: "files",
+    // No `load` yet — implementation approach (folder-picker vs. full
+    // device access) is still an open decision, so this is honestly a
+    // "coming soon" stub for now, same as the other unbuilt tools.
     guide: {
       whatItDoes: "Browse the files and folders on your device, and open them.",
       steps: [
@@ -91,7 +94,6 @@ export const tools = [
       ],
       example: "Downloads → photo.jpg → opens in your gallery app",
     },
-    load: () => import("../tools/file-manager/FileManager.svelte"),
   },
 
   // --- Not built yet (Sprint 4) — kept as Quick Actions per the

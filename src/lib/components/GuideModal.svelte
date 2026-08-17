@@ -6,13 +6,22 @@
   // Reused by every tool page later; only the props change.
   let { title, whatItDoes, steps, example, onClose } = $props();
 
-  function handleBackdropClick(event) {
-    if (event.target === event.currentTarget) onClose();
+  function handleKeydown(event) {
+    if (event.key === "Escape") onClose();
   }
 </script>
 
-<div class="backdrop" onclick={handleBackdropClick}>
-  <div class="modal">
+<svelte:window onkeydown={handleKeydown} />
+
+<div class="backdrop">
+  <button
+    type="button"
+    class="backdrop-dismiss"
+    onclick={onClose}
+    aria-label="Close"
+  ></button>
+
+  <div class="modal" role="dialog" aria-modal="true" aria-label={title}>
     <div class="modal-header">
       <h2>{title}</h2>
       <IconButton label="Close" onclick={onClose}>
@@ -51,14 +60,25 @@
   .backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
     display: flex;
     align-items: flex-end;
     justify-content: center;
     z-index: 10;
   }
 
+  .backdrop-dismiss {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
   .modal {
+    position: relative;
     background: var(--color-surface);
     border-radius: 20px 20px 0 0;
     width: 100%;
