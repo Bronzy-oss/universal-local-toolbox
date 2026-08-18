@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
 const STORAGE_KEY = "ult:recent-tool-ids";
-const MAX_RECENT = 6;
+const MAX_RECENT = 24;
 
 function readStored() {
   try {

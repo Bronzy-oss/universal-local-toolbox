@@ -4,26 +4,37 @@
   import CategoryPage from "./routes/CategoryPage.svelte";
   import ToolPage from "./routes/ToolPage.svelte";
 
-  // Still a simple local view-switch, not a real router — fine while
-  // navigation is this shallow (Home + 3 leaf screens, all one level
-  // deep). Revisit if it ever needs real history/back-button support.
-  let view = $state({ name: "home" });
+  // A real navigation stack — not just a single "current view" like
+  // before. That earlier version made Back always jump straight to
+  // Home, even from Home -> Category -> Tool, which skipped the
+  // Category screen entirely. Home always stays at the bottom of the
+  // stack and is never popped away.
+  let stack = $state([{ name: "home" }]);
+  let current = $derived(stack[stack.length - 1]);
 
-  function goHome() {
-    view = { name: "home" };
+  function push(view) {
+    stack = [...stack, view];
+  }
+
+  function goBack() {
+    if (stack.length > 1) stack = stack.slice(0, -1);
   }
 </script>
 
-{#if view.name === "settings"}
-  <Settings onBack={goHome} />
-{:else if view.name === "category"}
-  <CategoryPage category={view.category} onBack={goHome} onOpenTool={(tool) => (view = { name: "tool", tool })} />
-{:else if view.name === "tool"}
-  <ToolPage tool={view.tool} onBack={goHome} />
+{#if current.name === "settings"}
+  <Settings onBack={goBack} />
+{:else if current.name === "category"}
+  <CategoryPage
+    category={current.category}
+    onBack={goBack}
+    onOpenTool={(tool) => push({ name: "tool", tool })}
+  />
+{:else if current.name === "tool"}
+  <ToolPage tool={current.tool} onBack={goBack} />
 {:else}
   <Home
-    onOpenSettings={() => (view = { name: "settings" })}
-    onOpenCategory={(category) => (view = { name: "category", category })}
-    onOpenTool={(tool) => (view = { name: "tool", tool })}
+    onOpenSettings={() => push({ name: "settings" })}
+    onOpenCategory={(category) => push({ name: "category", category })}
+    onOpenTool={(tool) => push({ name: "tool", tool })}
   />
 {/if}

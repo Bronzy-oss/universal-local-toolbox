@@ -162,10 +162,6 @@ export const tools = [
   },
 ];
 
-export function getQuickActions() {
-  return tools.filter((t) => t.isQuickAction);
-}
-
 export function getToolsByCategory(categoryId) {
   return tools.filter((t) => t.category === categoryId);
 }

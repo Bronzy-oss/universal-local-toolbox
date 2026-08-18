@@ -11,6 +11,18 @@
   let recentTools = $derived(
     $recentToolIds.map((id) => getToolById(id)).filter(Boolean),
   );
+
+  // Column-major zigzag layout, most-recent-first:
+  //   row 1: 1st, 3rd, 5th, ...
+  //   row 2: 2nd, 4th, 6th, ...
+  // scrolling horizontally as more history accumulates.
+  let columns = $derived.by(() => {
+    const cols = [];
+    for (let i = 0; i < recentTools.length; i += 2) {
+      cols.push([recentTools[i], recentTools[i + 1] ?? null]);
+    }
+    return cols;
+  });
 </script>
 
 <Section label="Recent">
@@ -19,15 +31,48 @@
       <p>No recent tools yet — pick one below to get started.</p>
     </div>
   {:else}
-    <div class="grid-2">
-      {#each recentTools as tool (tool.id)}
-        <ToolCard glyph={tool.glyph} label={tool.label} onclick={() => onSelect(tool)} />
+    <div class="recent-scroll">
+      {#each columns as column, i (column[0].id)}
+        <div class="recent-column">
+          <ToolCard
+            glyph={column[0].glyph}
+            icon={column[0].icon}
+            label={column[0].label}
+            onclick={() => onSelect(column[0])}
+          />
+          {#if column[1]}
+            <ToolCard
+              glyph={column[1].glyph}
+              icon={column[1].icon}
+              label={column[1].label}
+              onclick={() => onSelect(column[1])}
+            />
+          {/if}
+        </div>
       {/each}
     </div>
   {/if}
 </Section>
 
 <style>
+  .recent-scroll {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin: 0 calc(var(--space-4) * -1);
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .recent-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex-shrink: 0;
+    width: 168px;
+  }
+
   .empty-state {
     border: 1.5px dashed var(--color-border);
     border-radius: var(--radius-lg);

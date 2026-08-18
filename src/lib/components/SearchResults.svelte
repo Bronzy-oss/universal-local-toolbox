@@ -68,6 +68,20 @@
     font-weight: 700;
   }
 
+  .icon-slot.has-image {
+    background: transparent;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .icon-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    display: block;
+  }
+
   .label {
     font-size: 0.875rem;
     font-weight: 550;
