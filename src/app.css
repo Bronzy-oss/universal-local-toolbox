@@ -57,6 +57,22 @@ body {
   color: var(--color-text);
 }
 
+/* Mobile WebView fix: without this, tapping or holding a button/card
+   can leave a stuck blue highlight or trigger the OS text-selection
+   "callout" menu, since touch devices don't clear :active the way a
+   mouse does. This removes both. */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+button,
+a,
+[role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 /* Shared layout utility — used by Quick Actions and Category grids */
 .grid-2 {
   display: grid;
