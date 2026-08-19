@@ -68,6 +68,18 @@ jobs:
       - name: Initialize Android project
         run: npx tauri android init
 
+      # This is the step that actually makes a custom app icon show up
+      # on Android. Editing src-tauri/icons/*.png by hand (what earlier
+      # steps did) only affects the *desktop* bundle — Android's launcher
+      # icon lives under src-tauri/gen/android/.../mipmap-*/, a folder
+      # that's regenerated fresh by `android init` above and is not
+      # committed to git. `tauri icon` is the official generator that
+      # derives every platform's icon (desktop AND Android/iOS mipmaps)
+      # from one master source image, run after init so gen/android
+      # already exists for it to populate.
+      - name: Generate all platform icons from source
+        run: npx tauri icon src-tauri/icon-source.png
+
       - name: Build Android (debug APK, aarch64 only)
         run: npx tauri android build --debug --target aarch64
 
