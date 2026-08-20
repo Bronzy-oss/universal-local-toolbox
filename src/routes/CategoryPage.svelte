@@ -20,7 +20,7 @@
   {:else}
     <div class="grid-2">
       {#each categoryTools as tool (tool.id)}
-        <ToolCard glyph={tool.glyph} label={tool.label} onclick={() => onOpenTool(tool)} />
+        <ToolCard glyph={tool.glyph} icon={tool.icon} label={tool.label} onclick={() => onOpenTool(tool)} />
       {/each}
     </div>
   {/if}
@@ -31,7 +31,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
-    padding: var(--space-5) var(--space-4) var(--space-6);
+    padding: calc(var(--space-5) + env(safe-area-inset-top)) var(--space-4) var(--space-6);
     max-width: 480px;
     margin: 0 auto;
   }

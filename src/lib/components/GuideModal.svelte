@@ -83,7 +83,7 @@
     border-radius: 20px 20px 0 0;
     width: 100%;
     max-width: 480px;
-    padding: var(--space-5) var(--space-4) var(--space-6);
+    padding: var(--space-5) var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
     gap: var(--space-4);

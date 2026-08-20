@@ -11,6 +11,7 @@
     {#each categories as category (category.id)}
       <ToolCard
         glyph={category.glyph}
+        icon={category.icon}
         label={category.label}
         onclick={() => onSelect(category)}
       />
